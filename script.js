@@ -60,6 +60,3 @@ function changeRound(direction) {
     }
     createTable();
 }
-
-// Call setupGame on page load
-setupGame();
