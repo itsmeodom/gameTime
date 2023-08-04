@@ -1,99 +1,69 @@
-const numRounds = 5;
-const numPlayers = 9;
-const playerNames = [...Array(numPlayers).keys()].map((i) => `Player ${i+1}`);
-const scores = Array(numPlayers).fill().map(() => Array(numRounds).fill({ win: null, points: 0 }));
+let numRounds;
+let playerNames;
+let scores;
+let currentRound = 0;
 
+document.getElementById('setupGame').addEventListener('click', setupGame);
 document.getElementById('startGame').addEventListener('click', startGame);
 document.getElementById('nextRound').addEventListener('click', () => changeRound(1));
 document.getElementById('prevRound').addEventListener('click', () => changeRound(-1));
 
-let currentRound = 0;
+function setupGame() {
+  numRounds = document.getElementById('numRounds').value;
+  const numPlayers = document.getElementById('numPlayers').value;
+  playerNames = [...Array(numPlayers).keys()].map((i) => `Player ${i + 1}`);
+  scores = Array(numPlayers).fill().map(() => Array(numRounds).fill({ win: null, points: 0 }));
+  document.getElementById('setupForm').style.display = 'none';
+  document.getElementById('startGame').style.display = 'block';
+}
 
 function startGame() {
-    createTable();
-    document.getElementById('nextRound').style.display = 'block';
+  createTable();
+  document.getElementById('nextRound').style.display = 'block';
+  document.getElementById('prevRound').style.display = 'block';
 }
 
 function createTable() {
-    const table = document.getElementById('scoreTable');
-    table.innerHTML = '';
+  const table = document.getElementById('scoreTable');
+  table.innerHTML = '';
+  const header = table.insertRow();
+  header.insertCell().textContent = 'Player Name';
+  for (let i = 0; i < numRounds; i++) {
+    const cell = header.insertCell();
+    cell.colSpan = '2';
+    cell.textContent = `Round ${i + 1}`;
+  }
 
-    // Header row
-    const headerRow = document.createElement('tr');
-    headerRow.appendChild(createCell('Player Name', true));
+  playerNames.forEach((player, index) => {
+    const row = table.insertRow();
+    row.insertCell().textContent = player;
     for (let i = 0; i < numRounds; i++) {
-        headerRow.appendChild(createCell(`W/L`, true));
-        headerRow.appendChild(createCell(`Pts Scored`, true));
+      const winCell = row.insertCell();
+      const pointsCell = row.insertCell();
+      const winSelect = document.createElement('select');
+      winSelect.innerHTML = '<option value="null"></option><option value="W">W</option><option value="L">L</option>';
+      winSelect.value = scores[index][i].win;
+      winCell.appendChild(winSelect);
+      const pointsInput = document.createElement('input');
+      pointsInput.type = 'number';
+      pointsInput.min = '0';
+      pointsInput.value = scores[index][i].points;
+      pointsInput.disabled = i !== currentRound;
+      pointsCell.appendChild(pointsInput);
     }
-    table.appendChild(headerRow);
-
-    // Player rows
-    playerNames.forEach((player, index) => {
-        const row = document.createElement('tr');
-        row.appendChild(createCell(player, true));
-        for (let i = 0; i < numRounds; i++) {
-            const winCell = createCell('');
-            const pointsCell = createCell('');
-
-            const winSelect = document.createElement('select');
-            winSelect.appendChild(new Option('W', 'W'));
-            winSelect.appendChild(new Option('L', 'L'));
-            winSelect.value = scores[index][i].win;
-            winSelect.disabled = i !== currentRound;
-            winSelect.addEventListener('change', (e) => updateScore(index, i, e.target.value, null));
-            winCell.appendChild(winSelect);
-
-            const pointsInput = document.createElement('input');
-            pointsInput.type = 'number';
-            pointsInput.min = '0';
-            pointsInput.value = scores[index][i].points;
-            pointsInput.disabled = i !== currentRound;
-            pointsInput.addEventListener('input', (e) => updateScore(index, i, null, Math.max(0, Number(e.target.value))));
-            pointsCell.appendChild(pointsInput);
-
-            row.appendChild(winCell);
-            row.appendChild(pointsCell);
-        }
-        table.appendChild(row);
-    });
-}
-
-function createCell(content, isHeader = false) {
-    const cell = document.createElement(isHeader ? 'th' : 'td');
-    cell.innerHTML = content;
-    return cell;
-}
-
-function updateScore(playerIndex, roundIndex, win, points) {
-    if (win !== null) scores[playerIndex][roundIndex].win = win;
-    if (points !== null) scores[playerIndex][roundIndex].points = points;
+  });
 }
 
 function changeRound(direction) {
-    currentRound += direction;
-    if (currentRound <= 0) {
-        document.getElementById('prevRound').style.display = 'none';
-    } else {
-        document.getElementById('prevRound').style.display = 'block';
-    }
-
-    if (currentRound >= numRounds - 1) {
-        document.getElementById('nextRound').style.display = 'none';
-        calculateTotalScores();
-    } else {
-        document.getElementById('nextRound').style.display = 'block';
-    }
-
-    createTable();
-}
-
-function calculateTotalScores() {
-    const totalScoresDiv = document.getElementById('totalScores');
-    totalScoresDiv.innerHTML = '';
-    playerNames.forEach((player, index) => {
-        const totalScore = scores[index].reduce((total, round) => {
-            return total + (round.win === 'W' ? 1 : 0) + (round.points * 0.1);
-        }, 0);
-        totalScoresDiv.innerHTML += `<div>${player}: ${totalScore}</div>`;
+  currentRound += direction;
+  if (currentRound < numRounds) {
+    // Reset current round to defaults
+    scores.forEach((playerScores) => {
+      playerScores[currentRound] = { win: null, points: 0 };
     });
+  }
+  createTable();
 }
+
+// Call setupGame on page load
+setupGame();
