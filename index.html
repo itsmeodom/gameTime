@@ -3,37 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <title>Game Scoring Tracker</title>
+    <title>Game Scorer</title>
     <style>
-        #totalScores div {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+        #setupForm, #gameInterface, #finalScores, select, input {
+            width: 50px;
         }
-        select, input {
-            width: 100%;
-            border: none;
+        #gameInterface, #finalScores {
+            display: none;
         }
     </style>
 </head>
-<body class="container mt-4">
-    <h1 class="text-center mb-4">Game Scoring Tracker</h1>
+<body>
     <div id="setupForm">
-        <label for="numPlayers">Number of Players:</label>
-        <input id="numPlayers" type="number" min="2" value="9">
-        <br>
-        <label for="numRounds">Number of Rounds:</label>
-        <input id="numRounds" type="number" min="1" value="5">
-        <br>
-        <button id="setupGame" class="btn btn-primary mb-3">Setup Game</button>
+        <label>Number of Players:</label>
+        <input type="number" id="numPlayers" min="2">
+        <label>Number of Rounds:</label>
+        <input type="number" id="numRounds" min="1">
+        <button onclick="setupGame()">Start Game Setup</button>
     </div>
-    <button id="startGame" class="btn btn-primary mb-3" style="display:none;">Start New Game</button>
-    <button id="prevRound" class="btn btn-secondary mb-3" style="display:none;">Previous Round</button>
-    <button id="nextRound" class="btn btn-success mb-3" style="display:none;">Next Round</button>
-    <table id="scoreTable" class="table table-bordered table-striped"></table>
-    <h2 class="text-center">Total Scores</h2>
-    <div id="totalScores"></div>
+    <div id="playerNames" style="display: none;"></div>
+    <div id="gameInterface">
+        <h3 id="roundIndicator"></h3>
+        <table id="scoreTable"></table>
+        <button id="prevRound" onclick="changeRound(-1)">Previous Round</button>
+        <button id="nextRound" onclick="changeRound(1)">Next Round</button>
+    </div>
+    <div id="finalScores" style="display: none;">
+        <h3>Final Scores</h3>
+        <table id="finalScoreTable"></table>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
