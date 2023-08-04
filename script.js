@@ -1,6 +1,6 @@
+const numRounds = 5;
 const numPlayers = 9;
 const playerNames = [...Array(numPlayers).keys()].map((i) => `Player ${i+1}`);
-const numRounds = 5; // Number of rounds in your game
 const scores = Array(numPlayers).fill().map(() => Array(numRounds).fill({ win: null, points: 0 }));
 
 document.getElementById('startGame').addEventListener('click', startGame);
