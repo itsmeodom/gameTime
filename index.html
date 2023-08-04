@@ -1,17 +1,10 @@
 <body>
     <h1>Game Scoring Tracker</h1>
-    <div id="playerSetup">
-        <h2>Players</h2>
-        <div id="playerNames"></div>
-        <button id="addPlayer">Add Player</button>
-        <button id="startSetup">Start Setup</button>
-    </div>
-    <div id="teamSetup" style="display:none;">
-        <h2>Number of Teams</h2>
-        <input type="number" id="numTeams" value="2" min="2">
-        <button id="startGame">Start Game</button>
-    </div>
-    <div id="rounds"></div>
+    <button id="startGame">Start New Game</button>
+    <table id="scoreTable">
+        <!-- The table rows will be filled dynamically -->
+    </table>
+    <button id="nextRound" style="display:none;">Next Round</button>
     <h2>Total Scores</h2>
     <div id="totalScores"></div>
     <script src="script.js"></script>
