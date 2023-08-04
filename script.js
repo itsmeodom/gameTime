@@ -4,7 +4,8 @@ const playerNames = [...Array(numPlayers).keys()].map((i) => `Player ${i+1}`);
 const scores = Array(numPlayers).fill().map(() => Array(numRounds).fill({ win: null, points: 0 }));
 
 document.getElementById('startGame').addEventListener('click', startGame);
-document.getElementById('nextRound').addEventListener('click', nextRound);
+document.getElementById('nextRound').addEventListener('click', () => changeRound(1));
+document.getElementById('prevRound').addEventListener('click', () => changeRound(-1));
 
 let currentRound = 0;
 
@@ -19,6 +20,7 @@ function createTable() {
 
     // Header row
     const headerRow = document.createElement('tr');
+    headerRow.appendChild(createCell('Player Name', true));
     for (let i = 0; i < numRounds; i++) {
         headerRow.appendChild(createCell(`W/L`, true));
         headerRow.appendChild(createCell(`Pts Scored`, true));
@@ -33,19 +35,22 @@ function createTable() {
             const winCell = createCell('');
             const pointsCell = createCell('');
 
-            if (i === currentRound) {
-                const winSelect = document.createElement('select');
-                winSelect.appendChild(new Option('W', 'W'));
-                winSelect.appendChild(new Option('L', 'L'));
-                winSelect.addEventListener('change', (e) => updateScore(index, i, e.target.value, null));
-                winCell.appendChild(winSelect);
+            const winSelect = document.createElement('select');
+            winSelect.appendChild(new Option('W', 'W'));
+            winSelect.appendChild(new Option('L', 'L'));
+            winSelect.value = scores[index][i].win;
+            winSelect.disabled = i !== currentRound;
+            winSelect.addEventListener('change', (e) => updateScore(index, i, e.target.value, null));
+            winCell.appendChild(winSelect);
 
-                const pointsInput = document.createElement('input');
-                pointsInput.type = 'number';
-                pointsInput.value = 0;
-                pointsInput.addEventListener('input', (e) => updateScore(index, i, null, Number(e.target.value)));
-                pointsCell.appendChild(pointsInput);
-            }
+            const pointsInput = document.createElement('input');
+            pointsInput.type = 'number';
+            pointsInput.min = '0';
+            pointsInput.value = scores[index][i].points;
+            pointsInput.disabled = i !== currentRound;
+            pointsInput.addEventListener('input', (e) => updateScore(index, i, null, Math.max(0, Number(e.target.value))));
+            pointsCell.appendChild(pointsInput);
+
             row.appendChild(winCell);
             row.appendChild(pointsCell);
         }
@@ -64,14 +69,22 @@ function updateScore(playerIndex, roundIndex, win, points) {
     if (points !== null) scores[playerIndex][roundIndex].points = points;
 }
 
-function nextRound() {
-    currentRound++;
-    if (currentRound >= numRounds) {
+function changeRound(direction) {
+    currentRound += direction;
+    if (currentRound <= 0) {
+        document.getElementById('prevRound').style.display = 'none';
+    } else {
+        document.getElementById('prevRound').style.display = 'block';
+    }
+
+    if (currentRound >= numRounds - 1) {
         document.getElementById('nextRound').style.display = 'none';
         calculateTotalScores();
     } else {
-        createTable();
+        document.getElementById('nextRound').style.display = 'block';
     }
+
+    createTable();
 }
 
 function calculateTotalScores() {
