@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#rounds {
+    margin-bottom: 20px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.score {
+    margin: 5px 0;
+}
