@@ -19,7 +19,16 @@
 </head>
 <body class="container mt-4">
     <h1 class="text-center mb-4">Game Scoring Tracker</h1>
-    <button id="startGame" class="btn btn-primary mb-3">Start New Game</button>
+    <div id="setupForm">
+        <label for="numPlayers">Number of Players:</label>
+        <input id="numPlayers" type="number" min="2" value="9">
+        <br>
+        <label for="numRounds">Number of Rounds:</label>
+        <input id="numRounds" type="number" min="1" value="5">
+        <br>
+        <button id="setupGame" class="btn btn-primary mb-3">Setup Game</button>
+    </div>
+    <button id="startGame" class="btn btn-primary mb-3" style="display:none;">Start New Game</button>
     <button id="prevRound" class="btn btn-secondary mb-3" style="display:none;">Previous Round</button>
     <button id="nextRound" class="btn btn-success mb-3" style="display:none;">Next Round</button>
     <table id="scoreTable" class="table table-bordered table-striped"></table>
