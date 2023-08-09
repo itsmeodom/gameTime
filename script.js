@@ -32,6 +32,7 @@ function startGame() {
     }
     scores = new Array(numPlayers).fill(null).map(() => new Array(numRounds).fill({ win: '', points: 0 }));
     document.getElementById('playerNames').style.display = 'none';
+    document.getElementById('setupForm').style.display = 'none';
     document.getElementById('gameInterface').style.display = 'block';
     createTable();
     updateLiveLeaderboard();
@@ -53,12 +54,12 @@ function createTable() {
         for (let rIndex = 0; rIndex < numRounds; rIndex++) {
             const winCell = row.insertCell();
             const pointsCell = row.insertCell();
-            const winSelect = document.createElement('select');
-            winSelect.style.width = '50px';
-            winSelect.innerHTML = '<option value=""></option><option value="W">W</option><option value="L">L</option>';
-            if (rIndex !== currentRound) winSelect.disabled = true;
-            if (scores[pIndex][rIndex].win) winSelect.value = scores[pIndex][rIndex].win;
-            winCell.appendChild(winSelect);
+            const winCheckbox = document.createElement('input');
+            winCheckbox.type = 'checkbox';
+            winCheckbox.style.margin = 'auto';
+            if (rIndex !== currentRound) winCheckbox.disabled = true;
+            if (scores[pIndex][rIndex].win === 'W') winCheckbox.checked = true;
+            winCell.appendChild(winCheckbox);
             const pointsInput = document.createElement('input');
             pointsInput.type = 'number';
             pointsInput.min = '0';
@@ -74,9 +75,10 @@ function changeRound(direction) {
     const table = document.getElementById('scoreTable');
     for (let pIndex = 0; pIndex < numPlayers; pIndex++) {
         const row = table.rows[pIndex + 1];
-        const winSelect = row.cells[currentRound * 2 + 1].querySelector('select');
+        const winCheckbox = row.cells[currentRound * 2 + 1].querySelector('input[type="checkbox"]');    
         const pointsInput = row.cells[currentRound * 2 + 2].querySelector('input');
-        scores[pIndex][currentRound] = { win: winSelect.value, points: parseFloat(pointsInput.value) || 0 };
+        scores[pIndex][currentRound] = { win: winCheckbox.checked ? 'W' : 'L', points: parseFloat(pointsInput.value) || 0 };
+
     }
     currentRound += direction;
     if (currentRound >= numRounds) {
