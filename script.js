@@ -154,5 +154,5 @@ function calculateFinalScores() {
         row.insertCell().textContent = score.totalScore.toFixed(1);
     }
     document.getElementById('finalScores').style.display = 'block';
-    document.getElementById('gameInterface').style.display = 'none';
+    document.getElementById('gameInterface').style.display = 'block';
 }
