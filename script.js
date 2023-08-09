@@ -104,3 +104,24 @@ function updateLiveLeaderboard() {
 function calculateScores() {
     return players.map((player, index) => {
         let totalScore = 0;
+        for (const score of scores[index]) {
+            totalScore += score.win === 'W' ? 1 : 0;
+            totalScore += score.points * 0.1;
+        }
+        return { player, totalScore };
+    });
+}
+
+function calculateFinalScores() {
+    const finalScores = calculateScores();
+    finalScores.sort((a, b) => b.totalScore - a.totalScore);
+    const table = document.getElementById('finalScoreTable');
+    table.innerHTML = '';
+    for (const score of finalScores) {
+        const row = table.insertRow();
+        row.insertCell().textContent = score.player;
+        row.insertCell().textContent = score.totalScore.toFixed(1);
+    }
+    document.getElementById('finalScores').style.display = 'block';
+    document.getElementById('gameInterface').style.display = 'none';
+}
