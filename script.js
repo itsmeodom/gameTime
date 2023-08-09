@@ -91,7 +91,7 @@ function createTable() {
             const pointsInput = document.createElement('input');
             pointsInput.type = 'number';
             pointsInput.min = '0';
-            pointsInput.style.width = '50px';
+            pointsInput.style.width = '100%';
             if (rIndex !== currentRound) pointsInput.disabled = true;
             if (scores[pIndex][rIndex].points) pointsInput.value = scores[pIndex][rIndex].points;
             pointsCell.appendChild(pointsInput);
