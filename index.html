@@ -8,7 +8,8 @@
         #setupform,
         #gameform,
         #scoreTable,
-        #finalScores {
+        #finalScores,
+        #liveScores {
             margin-bottom: 20px;
         }
         
@@ -17,7 +18,7 @@
         select {
             width: 100%;
             padding: 10px;
-            margin: 5px 0; /* Adds a bit of space above and below each input */
+            margin: 5px 0;
         }
         
         table {
@@ -26,11 +27,11 @@
         }
         
         table th, table td {
-            padding: 8px; /* Adds padding to table cells */
+            padding: 8px;
         }
         
         button {
-            margin: 5px; /* Adds a bit of space around buttons */
+            margin: 5px;
         }
     </style>
 </head>
@@ -51,6 +52,10 @@
                     <table id="scoreTable"></table>
                     <button id="prevRound" onclick="changeRound(-1)">Previous Round</button>
                     <button id="nextRound" onclick="changeRound(1)">Next Round</button>
+                </div>
+                <div id="liveScores" style="display: none;">
+                    <h3>Live Leaderboard</h3>
+                    <table id="liveScoreTable"></table>
                 </div>
                 <div id="finalScores" style="display: none;">
                     <h3>Final Scores</h3>
