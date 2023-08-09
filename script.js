@@ -68,6 +68,26 @@ function createTable() {
             };
             if (rIndex !== currentRound) winButton.disabled = true;
             winCell.appendChild(winButton);
+            // Set initial styles:
+            const setButtonStyle = () => {
+                const winValue = winButton.textContent;
+                winCell.className = winValue.toLowerCase() + '-state';
+                pointsCell.className = winValue.toLowerCase() + '-state';
+            };
+            
+            // Add an onclick listener to update styles:
+            winButton.onclick = function() {
+                if (winButton.textContent === 'B') {
+                    winButton.textContent = 'W';
+                } else if (winButton.textContent === 'W') {
+                    winButton.textContent = 'L';
+                } else {
+                    winButton.textContent = 'B';
+                }
+                setButtonStyle();  // Call the style function after updating the button's value
+            };
+            
+            setButtonStyle();  // Call once to set the initial styles
             const pointsInput = document.createElement('input');
             pointsInput.type = 'number';
             pointsInput.min = '0';
