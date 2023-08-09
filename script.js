@@ -34,6 +34,7 @@ function startGame() {
     document.getElementById('playerNames').style.display = 'none';
     document.getElementById('gameInterface').style.display = 'block';
     createTable();
+    updateLiveLeaderboard();
 }
 
 function createTable() {
@@ -83,25 +84,23 @@ function changeRound(direction) {
         return;
     }
     createTable();
+    updateLiveLeaderboard();
 }
 
-function calculateFinalScores() {
-    const finalScores = players.map((player, index) => {
-        let totalScore = 0;
-        for (const score of scores[index]) {
-            totalScore += score.win === 'W' ? 1 : 0;
-            totalScore += score.points * 0.1;
-        }
-        return { player, totalScore };
-    });
-    finalScores.sort((a, b) => b.totalScore - a.totalScore);
-    const table = document.getElementById('finalScoreTable');
+function updateLiveLeaderboard() {
+    const liveScores = calculateScores();
+    liveScores.sort((a, b) => b.totalScore - a.totalScore);
+    
+    const table = document.getElementById('liveScoreTable');
     table.innerHTML = '';
-    for (const score of finalScores) {
+    for (const score of liveScores) {
         const row = table.insertRow();
         row.insertCell().textContent = score.player;
         row.insertCell().textContent = score.totalScore.toFixed(1);
     }
-    document.getElementById('finalScores').style.display = 'block';
-    document.getElementById('gameInterface').style.display = 'none';
+    document.getElementById('liveScores').style.display = 'block';
 }
+
+function calculateScores() {
+    return players.map((player, index) => {
+        let totalScore = 0;
