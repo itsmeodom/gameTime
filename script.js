@@ -54,12 +54,20 @@ function createTable() {
         for (let rIndex = 0; rIndex < numRounds; rIndex++) {
             const winCell = row.insertCell();
             const pointsCell = row.insertCell();
-            const winCheckbox = document.createElement('input');
-            winCheckbox.type = 'checkbox';
-            winCheckbox.style.margin = 'auto';
-            if (rIndex !== currentRound) winCheckbox.disabled = true;
-            if (scores[pIndex][rIndex].win === 'W') winCheckbox.checked = true;
-            winCell.appendChild(winCheckbox);
+            const winButton = document.createElement('button');
+            winButton.style.width = '50px';
+            winButton.textContent = scores[pIndex][rIndex].win || 'B';  // Default to 'B'
+            winButton.onclick = function() {
+                if (winButton.textContent === 'B') {
+                    winButton.textContent = 'W';
+                } else if (winButton.textContent === 'W') {
+                    winButton.textContent = 'L';
+                } else {
+                    winButton.textContent = 'B';
+                }
+            };
+            if (rIndex !== currentRound) winButton.disabled = true;
+            winCell.appendChild(winButton);
             const pointsInput = document.createElement('input');
             pointsInput.type = 'number';
             pointsInput.min = '0';
@@ -74,10 +82,11 @@ function createTable() {
 function changeRound(direction) {
     const table = document.getElementById('scoreTable');
     for (let pIndex = 0; pIndex < numPlayers; pIndex++) {
-        const row = table.rows[pIndex + 1];
-        const winCheckbox = row.cells[currentRound * 2 + 1].querySelector('input[type="checkbox"]');    
+        const row = table.rows[pIndex + 1]; 
         const pointsInput = row.cells[currentRound * 2 + 2].querySelector('input');
-        scores[pIndex][currentRound] = { win: winCheckbox.checked ? 'W' : 'L', points: parseFloat(pointsInput.value) || 0 };
+        const winButton = row.cells[currentRound * 2 + 1].querySelector('button');
+        scores[pIndex][currentRound] = { win: winButton.textContent, points: parseFloat(pointsInput.value) || 0 };
+
 
     }
     currentRound += direction;
