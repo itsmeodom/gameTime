@@ -155,4 +155,5 @@ function calculateFinalScores() {
     }
     document.getElementById('finalScores').style.display = 'block';
     document.getElementById('gameInterface').style.display = 'block';
+    document.getElementById('liveScores').style.display = 'none';
 }
